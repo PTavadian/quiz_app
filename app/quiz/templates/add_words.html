@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+
+{% for cat, msg in get_flashed_messages(True) %}
+    <div class="flash {{cat}}">{{msg}}</div>
+{% endfor %}
+
+<form action="/add_words" method="post">
+
+    
+<table class="count_languages">
+    <tr><td>Количество языков 
+        <input class="count_languages" type="submit" name="column_counter" value="2" />
+        <input class="count_languages" type="submit" name="column_counter" value="3" />
+        <input class="count_languages" type="submit" name="column_counter" value="4" /></td></tr>
+</table>
+
+<table class="add_words" align="center">
+    <tr>
+        <td></td><td></td>
+        {% if column_counter > 2 %}<td></td>{% endif %}{% if column_counter > 3 %}<td></td>{% endif %}
+        <td>Урок №<input class="number" type="text" name="lesson" value="{{lesson}}" /></td>
+    </tr>
+    <tr align="center">
+        <td>First language</td>
+        <td>Second language</td>
+        {% if column_counter > 2 %}<td>Third language</td>{% endif %}
+        {% if column_counter > 3 %}<td>Fourth language</td>{% endif %}
+
+        {% if table %}
+            <td align="left"><input class="add_word" type="submit" name="append" value="загрузить таблицу" /></td>
+        {% endif %}
+    </tr>
+  
+    {% for i, row in table.items() %}
+        <tr align="left">
+            <td><input class="add_lng {{column_width}}" type="text" name="column_1_{{row.line}}" value="{{row.column_1}}" /></td>
+            <td><input class="add_lng {{column_width}}" type="text" name="column_2_{{row.line}}" value="{{row.column_2}}" /></td>
+            {% if column_counter > 2 %}
+                <td><input class="add_lng {{column_width}}" type="text" name="column_3_{{row.line}}" value="{{row.column_3}}" /></td>
+            {% endif %}
+            {% if column_counter > 3 %}
+                <td><input class="add_lng {{column_width}}" type="text" name="column_4_{{row.line}}" value="{{row.column_4}}" /></td>
+            {% endif %}
+            <td><input class="del_word" type="submit" name="delete" value="{{row.line}} удалить" /></td>
+        </tr>
+    {% endfor %}
+
+    {% if table %}
+        <tr>
+            <td></td><td></td>
+            {% if column_counter > 2 %}<td></td>{% endif %}{% if column_counter > 3 %}<td></td>{% endif %}
+            <td><input class="clean_word" type="submit" name="clean" value="отчистить таблицу" /></td>
+        </tr>
+    {% endif %}
+
+    {% if column_counter == 3 %}
+        <tr align="center"><td colspan="3">Вставь колонки со словами</td></tr>
+    {% elif column_counter > 3 %}
+        <tr align="center"><td colspan="4">Вставь колонки со словами</td></tr>
+    {% else %}
+        <tr align="center"><td colspan="2">Вставь колонки со словами</td></tr>
+    {% endif %}
+
+    <tr>
+        <td><textarea class="add_text {{column_width}}" name="column_1" rows=30 ></textarea></td>
+        <td><textarea class="add_text {{column_width}}" name="column_2" rows=30 ></textarea></td>
+        {% if column_counter > 2 %}
+            <td><textarea class="add_text {{column_width}}" name="column_3" rows=30 ></textarea></td>
+        {% endif %}
+        {% if column_counter > 3 %}
+            <td><textarea class="add_text {{column_width}}" name="column_4" rows=30 ></textarea></td>
+        {% endif %}
+        <td><input class="update_word" type="submit" name="update" value="обновить таблицу" /></td>
+    </tr>
+
+</table>
+
+</form>
+
+{% endblock %}
+
+

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+
+<form action="/my_words" method="post">
+
+<table class="count_languages">
+    <tr><td>Количество языков 
+        <input class="count_languages" type="submit" name="column_counter" value="2" />
+        <input class="count_languages" type="submit" name="column_counter" value="3" />
+        <input class="count_languages" type="submit" name="column_counter" value="4" /></td></tr>
+</table>
+
+<table class="words" align="center">
+
+    <tr align="center">
+        <td class="{{column_width}}">First language</td>
+        <td>Second language</td>
+        {% if column_counter > 2 %}<td>Third language</td>{% endif %}
+        {% if column_counter > 3 %}<td>Fourth language</td>{% endif %}
+
+        {% if table %}
+            <td align="left"><input class="add_word" type="submit" name="append" value="загрузить таблицу" /></td>
+        {% endif %}
+    </tr>
+
+{% set row = namespace() %}
+{% for word in words %}
+
+    <tr>  
+        {% if row.lesson != word.lesson and row.class != 'uneven_lesson' %}
+            <td>Урок №{{word.lesson}}
+            {% set row.class = 'uneven_lesson' %}  <!--четный-->
+
+        {% elif row.lesson != word.lesson and row.class != 'honest_lesson' %}
+            <td>Урок №{{word.lesson}}</td>
+            {% set row.class = 'honest_lesson' %}  <!--нечетный-->
+
+        {% endif %}
+        {% set row.lesson = word.lesson %}    
+    </tr>
+
+    <tr class="word">
+        <td class="first_lng"><input class="show_word {{row.class}} {{column_width}}" type="text" name="column_1_{{word.word_id}}" value="{{word.first_lng}}"></td>
+
+        <td class="second_lng"><input class="show_word {{row.class}} {{column_width}}" type="text" name="column_2_{{word.word_id}}" value="{{word.second_lng}}"></td>
+
+        {% if column_counter > 2 %}
+            <td class="third_lng"><input class="show_word {{row.class}} {{column_width}}" type="text" name="column_3_{{word.word_id}}" value="{{word.third_lng}}"></td>
+        {% endif %}
+
+        {% if column_counter > 3 %}
+            <td class="fourth_lng"><input class="show_word {{row.class}} {{column_width}}" type="text" name="column_4_{{word.word_id}}" value="{{word.fourth_lng}}"></td>
+        {% endif %}
+
+        <td><input class="button save_button" type="submit" name="save" value="✓ {{word.word_id}}" />
+            <input class="button del_button" type="submit" name="delete" value="X {{word.word_id}}" /></td>
+    </tr>
+
+{% endfor %}
+</table>
+</form>
+
+{% endblock %}

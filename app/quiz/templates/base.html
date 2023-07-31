@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link type="text/css" href="{{ url_for('static', filename='css/styles.css')}}" rel="stylesheet" />
+{% block title -%}
+    {% if title %}
+        <title>Some project{{title}}</title>
+    {% else %}
+        <title>Some project</title>
+    {% endif %}
+{% endblock %}
+</head>
+
+<body>
+{% block content -%}
+
+    {%- block mainmenu -%}
+        <ul class="mainmenu">
+
+            {% for p in menu %}
+                <li><a href="{{ url_for(p.nam) }}">{{p.name}}</a></li>
+            {% endfor %}
+
+            {% if authentication %}
+                <li class="last"><a href="{{ url_for('logout_page') }}" >logout</a></li>
+            {% else %}
+                <li class="last"><a href="{{ url_for('login_page') }}">login</a></li>
+            {% endif %}
+        </ul>
+    {% endblock mainmenu -%}
+
+<div class="clear"></div>
+<div class="content">
+
+	{% if title -%}
+        <h1>{{title}}</h1>
+	{% else -%}
+        <h1>Про Flask</h1>
+	{% endif -%}
+
+{% endblock -%}
+</div>
+</body>
+</html>

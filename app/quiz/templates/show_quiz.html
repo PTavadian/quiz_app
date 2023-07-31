@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+
+
+<form action="/show_quiz" method="post">
+
+{% if dict_words and id_word %}
+
+    <span class="menu">Выбери № урока</span>
+
+    {% for id_les in dict_words %}
+        {% if id_les == id_lesson %}
+            <input class="menu menu_select" type="submit" name="id_lesson" value="{{id_les}}" />
+        {% else %}
+            <input class="menu menu_other" type="submit" name="id_lesson" value="{{id_les}}" />
+        {% endif %}
+    {% endfor %}
+
+    <div class="word_quiz"> 
+        <input class="quiz" type="submit" name="quiz_column" value="{{ dict_words[id_lesson][id_word][quiz_column] }}" />
+    </div>
+
+    <div class="word_quiz_button"> 
+        <input class="quiz_button" type="submit" name="<" value="<" />
+        <input class="quiz_button" type="submit" name=">" value=">" />
+    </div>  
+
+    <script>
+        let button = document.querySelector('.quiz')
+        
+        button.addEventListener('click', function(){
+            button.classList.toggle('active');
+        })
+    </script>
+
+{% else %}
+    <p>У вас его нет слов</p>
+{% endif %}
+
+</form>
+
+{% endblock %}
